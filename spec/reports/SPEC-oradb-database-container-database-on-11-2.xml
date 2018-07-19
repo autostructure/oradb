@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="oradb::database container database on 11.2" tests="1" time="0.123008" failures="0" errors="0" skipped="0" timestamp="2018-02-02T09:41:08+05:30">
+  <testcase name="oradb::database container database on 11.2 should raise Puppet::Error with message matching /container or pluggable database is not supported on version 11.2/" time="0.122493">
+  </testcase>
+</testsuite>
