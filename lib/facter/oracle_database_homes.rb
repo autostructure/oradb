@@ -117,17 +117,39 @@ def get_orainst_products(path)
   end
 end
 
-# get orainst loc data
-inventory = get_orainst_loc
-Facter.add('oradb_inst_loc_data') do
-  setcode do
-    inventory
+####
+#Replaces code chunk below to limit run of ../OPatach commands to OEM and DB servers
+####
+command = 'hostname -f'
+output = %x[#{command}].strip
+
+if File.exist?('/opt/puppetlabs/facter/facts.d/' + output + '.yaml')
+ command = 'cat /opt/puppetlabs/facter/facts.d/' + output + '.yaml | grep oradb_fs::ora_platform | sed "s/.*\'\(.*\)\'.*/\1/"'
+ output = %x[#{command}].strip
+ if [ 'oem', 'db' ].include? output
+  # get orainst loc data
+  inventory = get_orainst_loc
+  Facter.add('oradb_inst_loc_data') do
+   setcode do
+     inventory
+   end
   end
+ end
 end
+####
+
+## get orainst loc data
+#inventory = get_orainst_loc
+#Facter.add('oradb_inst_loc_data') do
+#  setcode do
+#    inventory
+#  end
+#end
 
 # get orainst products
 inventory2 = get_orainst_products(inventory)
 Facter.add('oradb_inst_products') do
+ confine :"oradb_fs::ora_platform" => [ :oem, :db ]
   setcode do
     inventory2
   end
